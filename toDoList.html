@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+            /* border: 1px solid red; */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            width: 25%;
+            margin-inline: auto;
+        }
+
+        .label {
+            border: 1px solid rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 80vh;
+        }
+
+        #list {
+            margin-top: 30px;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            justify-content: start;
+            width: 100%;
+            text-align: center;
+        }
+
+        .label #list li {
+            
+            margin-block: 5px;
+            color: #000;
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        input[type="checkbox"] {
+            width: 25px;
+            height: 25px;
+            color: blue;
+            outline: none;
+            margin-right: 10px;
+        }
+        .inputContainer{
+            width: 80%;
+            height: 5%;
+        }
+        input{
+            width: 80%;
+            height: 100%;
+        }
+        .modal{
+         display: flex;
+         height: 5%;
+        }
+        #addTask{
+            width: 50%;
+            height: 100%;
+            background-color: green;
+            color: #fff;
+            font-weight: bold;
+        }
+        .btn{
+            color: #000;
+            border: none;
+            text-align: center;
+            width: 60px;
+            height: 25px;
+            margin: 2px;
+            background-color: #fff;
+            box-shadow: 1px 5px 2px 1px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="label">
+        <h1>Advance Task List</h1>
+        <label for="input">New Task</label>
+        <div class="modal">
+            <input type="text" id="input" name="input">
+            <button id="addTask">Add Task</button>
+        </div>
+        <ul id="list"></ul>
+    </div>
+</div>
+
+<script>
+    //Almodiel_JethroITMAWD12B
+
+    const inputEl = document.querySelector("#input");
+    const addTaskEl = document.querySelector("#addTask");
+    const listEl = document.querySelector("#list");
+    let task = [];
+
+    addTaskEl.addEventListener('click', () => {
+        const listVal = inputEl.value.trim();
+        if (listVal !== "") {
+            task.push(listVal);
+            clearInputField();
+            updateList();
+        }
+    });
+
+    const updateList = ()=>{
+        listEl.innerHTML = "";
+        task.forEach((taskEl, taskId) => {
+            createEl(task, taskId);
+            console.log(task);
+        });
+    }
+
+    const createEl =(task, Id) =>{
+        const createLi = document.createElement('li');
+        const createRemoveBtn = document.createElement('button');
+        const createEditBtn = document.createElement('button');
+        const createBox = document.createElement('input');
+        const createP = document.createElement('p');
+
+        createEditBtn.textContent = 'Edit';
+        createRemoveBtn.textContent = 'Remove';
+        createEditBtn.classList.add('btn')
+        createRemoveBtn.classList.add('btn')
+
+        createBox.setAttribute('type', 'checkbox');
+        createBox.addEventListener('change', () => check(createBox, Id));
+        createEditBtn.addEventListener('click', () => edit(createP, Id));
+        createRemoveBtn.addEventListener('click', () => remove(Id));
+
+        createLi.appendChild(createBox);
+        createLi.appendChild(createP);
+        createLi.appendChild(createEditBtn);
+        createLi.appendChild(createRemoveBtn);
+
+        newText(createP, task);
+        listEl.appendChild(createLi);
+    }
+
+    const edit =(element, Id)=>{
+        if (!element.isContentEditable) {
+            element.contentEditable = true;
+            element.focus();
+            
+            element.addEventListener('blur', () => {
+                element.contentEditable = false;
+                    task[Id] = element.textContent;
+            });
+        }
+    }
+
+    const remove = (Id) =>{
+        task.splice(Id, 1);
+        updateList();
+    }
+
+    const check= (checkbox)=> {
+        if (checkbox.checked) {
+            alert('Congrats...')
+        }
+    }
+
+    const clearInputField =()=>{
+        inputEl.value = "";
+    }
+
+    const newText =(element, text)=> {
+        element.textContent = text;
+    }
+</script>
+</body>
+</html>
